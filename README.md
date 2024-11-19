@@ -7,15 +7,16 @@ You don't need to install the tool but you may need some dependencies. Use the f
 sudo apt install python3-venv ## or something similar
 git clone https://github.com/RackunSec/windmill.git
 cd windmill
-python3 -m venv .venv
-source .venv/bin/activate
-python3 -m pip install -r requirements.txt
+python3 -m venv .venv ## create a virtual environment
+source .venv/bin/activate ## activate virtual environment
+python3 -m pip install -r requirements.txt ## Install dependencies in virtual environment
+python3 windmill.py ## test run and review args
 ```
 ## Usage
 To use Windmill, use the following steps:
  1. Open Burp Browser (Chrome) and navigate to your target web application
- 2. Log into the web application
- 3. Use developer tools to veiw cookies - Application tab->Cookies on left side bar->choose the domain
+ 2. Log into the target web application
+ 3. Use developer tools to view cookies - Application tab->Cookies on left side bar->choose the domain
  4. Copy all the text shown into a file
  5. Run Windmill
 
