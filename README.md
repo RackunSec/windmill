@@ -1,6 +1,6 @@
 # Windmill
-## Windmill Cookie Reviewer
-I created this script to output session cookie information that is report friendly.
+## Cookie Reviewer
+I created this script to output session cookie information that is report friendly. I love windmill cookies. 
 ## Install
 You don't need to install the tool but you may need some dependencies. Use the following commands to get Windmill up and running:
 ```bash
