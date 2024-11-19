@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 ## Windmill Cookie Review - Output formatted for Penetration Test Reports
-## @RackunSec
+## Douglas@RedSiege.com - @RackunSec
 ## Copy cookies in Burp Browser into a file
-## Run this app and use -f <file> -d <domain>
+## Run this app and use -f <file>
 from sys import argv as args ## App arguments
 from sys import exit as exit ## Exit
 from os import path as path ## Reading in the cookies file
@@ -17,6 +17,9 @@ class Windmill:
         ## Red color for risk:
         self.RST='\033[0m' 
         self.RED=fg(197)
+        self.sameSite = []
+        self.secure = []
+        self.httpOnly = []
 
 ## Review Cookies
     def cookieReview(self):
@@ -32,14 +35,38 @@ class Windmill:
                     if self.domain in splitLine[2]: ## Only document the cookies from the domain
                         try:
                             ## translate for a report. Red X or None means trouble.
-                            if splitLine[6] == "": splitLine[6] = "{}✕{}".format(self.RED,self.RST) 
-                            if splitLine[7] == "": splitLine[7] = "{}✕{}".format(self.RED,self.RST)
-                            if splitLine[8] == "None": splitLine[8] = "{}None{}".format(self.RED,self.RST)
+                            if splitLine[6] == "": ## HttpOnly
+                                splitLine[6] = "{}✕{}".format(self.RED,self.RST) 
+                                self.httpOnly.append(splitLine[0]) ## keep for later
+                            if splitLine[7] == "": ## Secure
+                                splitLine[7] = "{}✕{}".format(self.RED,self.RST)
+                                self.secure.append(splitLine[0]) ## keep for later
+                            if splitLine[8] == "None": ## SameSite
+                                splitLine[8] = "{}None{}".format(self.RED,self.RST)
+                                self.sameSite.append(splitLine[0]) ## keep for later
                             ## Make a PrettyTable row:
                             self.cookieTable.add_row([splitLine[0],splitLine[2],splitLine[6],splitLine[7],splitLine[8]])
                         except:
                             pass ## something wrong with input.
             print(self.cookieTable)
+            if len(self.httpOnly) > 0:
+                print("\n[i] The following cookies were missing the \"HttpOnly\" directive:\n")
+                self.httpOnly.sort()
+                for cookie in self.httpOnly:
+                    print(" {}".format(cookie))
+
+            if len(self.secure) > 0:
+                print("\n[i] The following cookies were missing the \"Secure\" directive:\n")
+                self.secure.sort()
+                for cookie in self.secure:
+                    print(" {}".format(cookie))
+
+            if len(self.sameSite) > 0:
+                print("\n[i] The following cookies have an insecure \"SameSite\" value:\n")
+                self.secure.sort()
+                for cookie in self.sameSite:
+                    print(" {}".format(cookie))
+
         else:
             usage("Could not open {} for reading.".format(self.file))
 
